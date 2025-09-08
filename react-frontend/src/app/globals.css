@@ -11,6 +11,7 @@
   --red: #FF3636;
   --dark: #1A1715;
   --blue: #0B65C2;
+  --pdark: #101010;
 }
 
 @theme inline {
@@ -23,7 +24,8 @@
   --color-yellow: var(--yellow);
   --color-red: var(--red);
   --color-dark: var(--dark);
-  --color-blue: var(--blue)
+  --color-blue: var(--blue);
+  --color-pdark: var(--pdark)
 }
 
 @media (prefers-color-scheme: dark) {
