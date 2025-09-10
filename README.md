@@ -9,11 +9,11 @@ Bem-vindo(a) à base de desenvolvimento da **Twelfth**! Nossa missão é constru
 Nossa plataforma é desenvolvida com um conjunto de tecnologias modernas e eficientes:
 
 -   **Frontend:**
-       ![Next.js](https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js)
-       ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react)
+       - ![Next.js](https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js)
+       - ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react)
 -   **Backend:**
-       ![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
-       ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) 
+       - ![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
+       - ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) 
 
 ---
 
