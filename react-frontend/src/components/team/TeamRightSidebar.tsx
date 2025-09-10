@@ -78,7 +78,7 @@ const players4231: Player[] = [
 
 const SearchBar: React.FC = () => (
   <div className="relative mb-6">
-    <MagnifyingGlassIcon size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-lines" />
+    <MagnifyingGlassIcon size={22} className="absolute left-4 top-1/2 -translate-y-1/2 text-lines" />
     <input
       type="text"
       placeholder="Buscar"
