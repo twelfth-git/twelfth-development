@@ -1,13 +1,78 @@
-Bem-vindo a base de desenvolvimento da Twelfth, uma rede integrativa entre pessoas que vivem o futebol e gostariam de um lugar para vivenciar, encontrar companhias e viver sua paixão de uma forma que nunca fizeram antes.
+### ⚽ Twelfth: A Rede de Apaixonados por Futebol
 
-A nossa base de frontend é composta pelo Next.js que por sua vez é alimentada pelo React; a nossa base de backend é feita em GO, porém ainda usaremos python para termos melhores e mais desenvolvidas formas de sugestões e machine-learning
-- Para "setar" seu ambiente de desenvolvimento você tem que ter baixado no seu computador o Node.js e por conseguinte o npm; também deve ter baixado no seu computador o GO ( Golang do Google ).
-- O documento .env não é subido ao github por motivos de segurança, mas para que possa rodar o backend é necessário ter esse arquivo na raíz do código da pasta "go-backend"
-- Para instalar o frontend é só seguir o passo a passo : cd react-frontend -> npm install -> npm run dev
-- Para o backend é necessário primeiramente do arquivo .env, o pedra90zz tem acesso a ele, após estar com o arquivo na pasta raíz do código do "go-backend" é só seguir esse passo a passo: cd go-backend -> go run cmd/api/main.go
-- Após atualizar o código, exclua a .env da pasta raíz do código do "go-backend" e faça o commit push no github seguindo esse passo a passo : git add . -> git commit -m "ALTERAÇÕES QUE FORAM FEITAS" -> git push origin main
+Bem-vindo(a) à base de desenvolvimento da **Twelfth**! Nossa missão é construir uma comunidade integrativa para quem vive e respira futebol. Aqui, as pessoas podem encontrar companhias, vivenciar a paixão pelo esporte e criar experiências únicas. Junte-se a nós para construir a maior rede de futebol do mundo!
 
-MUITO IMPORTANTE!!!
-NÃO SE ESQUEÇA DE EXCLUIR A PASTA .env ANTES DE ATUALIZAR O REPOSITÓRIO NO GITHUB, SE FIZER ISSO VAI CRIAR UM GRANDE ERRO DE SEGURANÇA, SEM CONTAR QUE NÃO VAI CONSEGUIR SUBIR CORRETAMENTE AS MUDANÇAS QUE VOCÊ FEZ AO REPOSITÓRIO.
+---
 
-Atualizado em 10/09/2025 por pedra90zz
+### 💻 Tecnologias Utilizadas
+
+Nossa plataforma é desenvolvida com um conjunto de tecnologias modernas e eficientes:
+
+-   **Frontend:**
+    -   ![Next.js](https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js)
+    -   ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react)
+-   **Backend:**
+    -   ![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
+    -   ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python) (para machine learning e sugestões)
+
+---
+
+### 🚀 Configurando o Ambiente de Desenvolvimento
+
+Para começar, certifique-se de que os seguintes programas estão instalados em seu computador:
+
+1.  **Node.js** e **npm**: [Faça o download aqui](https://nodejs.org/en/download/)
+2.  **Go (Golang)**: [Faça o download aqui](https://go.dev/doc/install)
+
+#### Frontend
+
+1.  Abra o terminal e navegue até a pasta do frontend:
+    ```bash
+    cd react-frontend
+    ```
+2.  Instale as dependências:
+    ```bash
+    npm install
+    ```
+3.  Inicie o servidor de desenvolvimento:
+    ```bash
+    npm run dev
+    ```
+
+#### Backend
+
+1.  **Atenção!** O arquivo `.env` é necessário para rodar o backend, mas **NÃO** é subido para o GitHub por questões de segurança. Fale com **pedra90zz** para obtê-lo.
+2.  Com o arquivo `.env` na pasta **`go-backend`**, navegue até o diretório:
+    ```bash
+    cd go-backend
+    ```
+3.  Inicie o servidor:
+    ```bash
+    go run cmd/api/main.go
+    ```
+
+---
+
+### ⚠️ Importante: Processo de Commit e Push
+
+Para garantir a segurança do nosso repositório, é **fundamental** que você siga estas instruções antes de fazer um commit:
+
+1.  **EXCLUA** o arquivo `.env` da pasta **`go-backend`**.
+2.  Adicione as suas alterações:
+    ```bash
+    git add .
+    ```
+3.  Faça o commit com uma mensagem clara:
+    ```bash
+    git commit -m "SUA MENSAGEM DESCRITIVA"
+    ```
+4.  Envie as alterações para o repositório:
+    ```bash
+    git push origin main
+    ```
+
+**LEMBRE-SE:** Nunca, em hipótese alguma, comite o arquivo `.env`. Isso pode causar uma grave falha de segurança e impedir o envio das suas alterações.
+
+---
+
+_Última atualização: 10/09/2025 por pedra90zz_
