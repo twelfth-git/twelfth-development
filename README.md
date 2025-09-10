@@ -9,9 +9,11 @@ Bem-vindo(a) à base de desenvolvimento da **Twelfth**! Nossa missão é constru
 Nossa plataforma é desenvolvida com um conjunto de tecnologias modernas e eficientes:
 
 -   **Frontend:**
+       
        - ![Next.js](https://img.shields.io/badge/Next.js-black?style=for-the-badge&logo=next.js)
        - ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react)
 -   **Backend:**
+      
        - ![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
        - ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) 
 
@@ -50,6 +52,19 @@ Para começar, certifique-se de que os seguintes programas estão instalados em 
     ```bash
     go run cmd/api/main.go
     ```
+
+---
+
+### ✅ Antes de Começar a Codar
+
+Para evitar conflitos e garantir que você esteja trabalhando com a versão mais recente do código, siga este passo crucial **antes de iniciar qualquer tarefa**:
+
+1.  No terminal, certifique-se de estar na pasta raiz do seu repositório.
+2.  Puxe as últimas alterações do repositório remoto:
+    ```bash
+    git pull origin main
+    ```
+Isso garante que sua cópia local esteja sempre sincronizada com a versão mais atualizada, evitando dores de cabeça com fusões de código.
 
 ---
 
