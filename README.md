@@ -1,4 +1,4 @@
-### ⚽ Twelfth: A Rede de Apaixonados por Futebol
+###  Twelfth: A Rede de Apaixonados por Futebol
 
 Bem-vindo(a) à base de desenvolvimento da **Twelfth**! Nossa missão é construir uma comunidade integrativa para quem vive e respira futebol. Aqui, as pessoas podem encontrar companhias, vivenciar a paixão pelo esporte e criar experiências únicas. Junte-se a nós para construir a maior rede de futebol do mundo!
 
