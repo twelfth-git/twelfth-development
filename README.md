@@ -30,14 +30,17 @@ Para começar, certifique-se de que os seguintes programas estão instalados em 
 
 1.  Abra o terminal e navegue até a pasta do frontend:
     ```bash
+
     cd react-frontend
     ```
 2.  Instale as dependências:
     ```bash
+
     npm install
     ```
 3.  Inicie o servidor de desenvolvimento:
     ```bash
+
     npm run dev
     ```
 
@@ -46,11 +49,13 @@ Para começar, certifique-se de que os seguintes programas estão instalados em 
 1.  **Atenção!** O arquivo `.env` é necessário para rodar o backend, mas **NÃO** é subido para o GitHub por questões de segurança. Fale com **pedra90zz** para obtê-lo.
 2.  Com o arquivo `.env` na pasta **`go-backend`**, navegue até o diretório:
     ```bash
+
     cd go-backend
     ```
 3.  Inicie o servidor:
     ```bash
-    go run cmd/api/main.go
+
+     go run cmd/api/main.go
     ```
 
 ---
@@ -62,7 +67,8 @@ Para evitar conflitos e garantir que você esteja trabalhando com a versão mais
 1.  No terminal, certifique-se de estar na pasta raiz do seu repositório.
 2.  Puxe as últimas alterações do repositório remoto:
     ```bash
-    git pull origin main
+
+     git pull origin main
     ```
 Isso garante que sua cópia local esteja sempre sincronizada com a versão mais atualizada, evitando dores de cabeça com fusões de código.
 
@@ -75,14 +81,17 @@ Para garantir a segurança do nosso repositório, é **fundamental** que você s
 1.  **EXCLUA** o arquivo `.env` da pasta **`go-backend`**.
 2.  Adicione as suas alterações:
     ```bash
+
     git add .
     ```
 3.  Faça o commit com uma mensagem clara:
     ```bash
+
     git commit -m "SUA MENSAGEM DESCRITIVA"
     ```
 4.  Envie as alterações para o repositório:
     ```bash
+
     git push origin main
     ```
 
