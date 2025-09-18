@@ -1,14 +1,6 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google"; // 1. Importe a Lato
 import "./globals.css";
-
-// 2. Configure a fonte Lato
-const lato = Roboto({
-  subsets: ["latin"],
-  variable: "--font-roboto", // Define a variável CSS para a nova fonte
-  // A Lato tem vários pesos, estes são os mais comuns:
-  weight: ['300', '400', '700', '900'],
-});
 
 export const metadata: Metadata = {
   title: "Twelfth",
@@ -17,15 +9,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      {/* 3. Aplique a nova variável no className */}
-      <body className={`${lato.variable} antialiased`}>
-        {children}
-      </body>
+    <html lang="pt-BR">
+      <head>
+        <link
+          href="https://fonts.cdnfonts.com/css/neue-haas-grotesk-display-pro"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="antialiased font-neuehaas">{children}</body>
     </html>
   );
 }

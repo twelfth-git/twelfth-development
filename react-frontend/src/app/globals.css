@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+   --font-neuehaas: 'Neue Haas Grotesk Display Pro', sans-serif;
   --background: #ffffff;
   --foreground: #171717;
   --light : #CABDB3;
@@ -38,5 +39,8 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-roboto), sans-serif;
+  font-family: var(--font-neuehaas), sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
