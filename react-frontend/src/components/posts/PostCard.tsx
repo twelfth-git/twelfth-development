@@ -1,180 +1,175 @@
 "use client";
-
-import { useState, useMemo } from "react";
-import { useRouter } from 'next/navigation';
 import {
   ChatCircleIcon,
-  DotsThreeIcon,
   HeartIcon,
   MedalIcon,
+  PushPinSimpleIcon,
   RepeatIcon,
   ShareFatIcon,
+  DotsThreeOutlineIcon,
 } from "@phosphor-icons/react";
+import React, { useState } from "react";
 
-
-interface Post {
-  id: string | number;
-  user: {
-    name: string;
-    username: string;
-    avatarUrl: string;
-  };
-  content: string;
-  imageUrl?: string;
-  createdAt: string;
-  stats: {
-    comments: number;
-    likes: number;
-    repeats: number;
-  };
-  isLikedByCurrentUser: boolean;
-  isRepeatedByCurrentUser: boolean;
-  interactedUsers: {
-    name: string;
-    avatarUrl: string;
-  }[];
-  taggedPlayers: {
-    id: string;
-    name: string;
-  }[];
+// Definição da interface para as props, garantindo tipagem segura
+interface PostcardProps {
+  fixed: boolean;
+  userAvatar: string;
+  userName: string;
+  userHandle: string;
+  timePosted: string;
+  postText: string;
+  postImages: string[];
+  initialComments: number;
+  initialReposts: number;
+  initialLikes: number;
 }
 
-interface PostCardProps {
-  post: Post;
-}
+export default function Postcard({
+  fixed,
+  userAvatar,
+  userName,
+  userHandle,
+  timePosted,
+  postText,
+  postImages,
+  initialComments,
+  initialReposts,
+  initialLikes,
+}: PostcardProps) {
+  // Funções de formatação e interações movidas para o componente Postcard
+  const [reposts, setReposts] = useState(initialReposts);
+  const [likes, setLikes] = useState(initialLikes);
+  const [repostActive, setRepostActive] = useState(false);
+  const [liked, setLiked] = useState(false);
 
+  function fmt(n: number) {
+    if (n >= 1000) return `${(n / 1000).toFixed(1)} mil`;
+    return String(n);
+  }
 
-const formatTimeAgo = (dateString: string): string => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-    
-    let interval = seconds / 31536000;
-    if (interval > 1) return Math.floor(interval) + "a";
-    interval = seconds / 2592000;
-    if (interval > 1) return Math.floor(interval) + "m";
-    interval = seconds / 86400;
-    if (interval > 1) return Math.floor(interval) + "d";
-    interval = seconds / 3600;
-    if (interval > 1) return Math.floor(interval) + "h";
-    interval = seconds / 60;
-    if (interval > 1) return Math.floor(interval) + "min";
-    return Math.floor(seconds) + "s";
-};
-
-const formatCount = (num: number) => num >= 1000 ? `${(num / 1000).toFixed(1)}k`.replace('.0', '') : num;
-
-
-export default function PostCard({ post }: PostCardProps) {
-  const router = useRouter();
-
-  const [isLiked, setIsLiked] = useState(post.isLikedByCurrentUser);
-  const [isRepeated, setIsRepeated] = useState(post.isRepeatedByCurrentUser);
-
-  const handleLikeClick = () => setIsLiked(!isLiked);
-  const handleRepeatClick = () => setIsRepeated(!isRepeated);
-
-  const highlightedContent = useMemo(() => {
-    let content = post.content;
-    if (!post.taggedPlayers || post.taggedPlayers.length === 0) {
-      return content;
-    }
-    
-    post.taggedPlayers.forEach(player => {
-      const regex = new RegExp(`\\b(${player.name})\\b`, 'gi');
-      content = content.replace(regex, `<span data-player-id="${player.id}" class="text-orange hover:underline font-semibold cursor-pointer">$1</span>`);
+  function toggleLike() {
+    setLiked((s) => {
+      setLikes((prev) => (s ? prev - 1 : prev + 1));
+      return !s;
     });
-    return content;
-  }, [post.content, post.taggedPlayers]);
+  }
 
-  const handleContentClick = (e: React.MouseEvent<HTMLParagraphElement>) => {
-    const target = e.target as HTMLElement;
-    if (target.tagName === 'SPAN' && target.dataset.playerId) {
-      e.stopPropagation();
-      router.push(`/home?playerId=${target.dataset.playerId}`);
-    }
-  };
+  function toggleRepost() {
+    setRepostActive((s) => {
+      setReposts((prev) => (s ? prev - 1 : prev + 1));
+      return !s;
+    });
+  }
 
   return (
-    <div>
-      <div className="flex flex-col px-6 py-4 gap-4 cursor-pointer hover:bg-white/5 transition-colors duration-200 border-b border-lines">
-        <div className="flex gap-2 items-center justify-between">
-          <div className="flex gap-2">
-            <img className="size-10 rounded-lg object-cover" src={post.user.avatarUrl} alt={`${post.user.name} avatar`}/>
-            <div>
-              <p className="text-light font-bold">{post.user.name}</p>
-              <p className="text-light text-xs">@{post.user.username}</p>
+    <div className="mt-4 gap-4 ml-8 flex">
+      <div className="flex flex-col gap-2 bg-[linear-gradient(180deg,#060606_0%,#151515_100%)] p-4 rounded-lg border border-lines w-132">
+        {fixed && (
+          <div className="flex gap-2 items-center">
+            <PushPinSimpleIcon
+              size={16}
+              weight="fill"
+              className="text-light"
+            />
+            <p className="text-sm text-light">Fixado</p>
+          </div>
+        )}
+        <div className="flex justify-between">
+          <div className="flex gap-2 items-center">
+            <img
+              src={userAvatar}
+              className="size-10 object-cover rounded-lg"
+              alt="avatar user"
+            />
+            <div className="flex flex-col">
+              <p className="text-light font-bold">{userName}</p>
+              <p className="text-sm text-lines">@{userHandle}</p>
             </div>
           </div>
-          <div className="flex gap-2 items-center cursor-pointer">
-            <p className="text-light text-sm">{formatTimeAgo(post.createdAt)}</p>
-            <DotsThreeIcon className="text-light" size={20} />
+          <div className="flex items-center gap-2">
+            <p className="text-sm text-lines">{timePosted}</p>
+            <DotsThreeOutlineIcon
+              size={16}
+              className="text-lines cursor-pointer"
+            />
           </div>
         </div>
-        
-        <p
-          className="text-light font-medium whitespace-pre-wrap"
-          onClick={handleContentClick}
-          dangerouslySetInnerHTML={{ __html: highlightedContent }}
-        />
-        
-        {post.imageUrl && (
-            <img src={post.imageUrl} className="max-w-72 rounded-lg" alt="Mídia do post"/>
-        )}
-        
-        {post.interactedUsers.length > 0 && (
-          <div className="flex items-center">
-            <div className="relative flex items-center">
-              {post.interactedUsers.slice(0, 3).map((user, index) => (
-                  <img
-                    key={index}
-                    src={user.avatarUrl}
-                    alt={user.name}
-                    className={`size-5 rounded-sm object-cover ${index > 0 ? '-ml-1' : ''}`}
-                    style={{ zIndex: 3 - index }}
-                  />
-              ))}
-            </div>
-            <p className="text-light text-sm ml-2 cursor-pointer">
-              Curtido por <span className="font-bold">{post.interactedUsers[0].name}</span> e{" "}
-              <span className="font-bold">outras pessoas</span>
-            </p>
-          </div>
-        )}
+        <p className="text-light">{postText}</p>
+        <div className="mt-2 flex gap-1">
+          {postImages.map((src, index) => (
+            <img
+              key={index}
+              src={src}
+              className="w-40 h-46 object-cover rounded-lg"
+              alt={`Post image ${index + 1}`}
+            />
+          ))}
+        </div>
 
-        <div className="flex gap-2">
-          <div className="flex gap-1 px-2 items-center border border-light/50 rounded-lg cursor-pointer transition-colors duration-200 group">
-            <ChatCircleIcon className="text-light group-hover:text-white" size={16} />
-            <p className="text-sm text-light group-hover:text-white">{post.stats.comments}</p>
-          </div>
-
-          <div
-            className={`flex gap-1 px-2 items-center rounded-lg border border-light/50 cursor-pointer transition-colors duration-200 group ${isLiked ? "border-orange" : "border-light/50"}`}
-            onClick={handleLikeClick}
+        <div className="mt-3 flex items-center gap-3">
+          <button
+            aria-label="Comentários"
+            className="flex items-center gap-2 px-3 py-1 rounded-lg border-2 border-lines text-lines bg-transparent hover:border-orange transition-all duration-200 cursor-pointer"
           >
-            <HeartIcon className={`${isLiked ? "text-orange" : "text-light group-hover:text-white"}`} size={16} weight={isLiked ? "fill" : "regular"} />
-            <p className={`text-sm ${isLiked ? "text-orange" : "text-light group-hover:text-white"}`}>
-              {formatCount(isLiked ? post.stats.likes + 1 : post.stats.likes)}
-            </p>
-          </div>
+            <ChatCircleIcon
+              size={16}
+              weight="regular"
+              className="text-inherit"
+            />
+            <span className="text-sm select-none">{fmt(initialComments)}</span>
+          </button>
 
-          <div
-            className={`flex gap-1 px-2 items-center rounded-lg border border-light/50 cursor-pointer transition-colors duration-200 group ${isRepeated ? "border-orange" : "border-light/50"}`}
-            onClick={handleRepeatClick}
+          <button
+            aria-label="Repost"
+            onClick={toggleRepost}
+            className={`flex items-center gap-2 px-3 py-1 rounded-lg border-2 text-sm select-none transition-all duration-200 cursor-pointer
+              ${
+                repostActive
+                  ? "border-orange text-orange bg-[rgba(255,138,0,0.06)] hover:shadow-[0_0_10px_rgba(255,138,0,0.15)]"
+                  : "border-lines text-lines hover:border-orange"
+              }`}
           >
-            <RepeatIcon className={`${isRepeated ? "text-orange" : "text-light group-hover:text-white"}`} size={16} weight={isRepeated ? "fill" : "regular"}/>
-            <p className={`text-sm ${isRepeated ? "text-orange" : "text-light group-hover:text-white"}`}>
-              {formatCount(post.stats.repeats)}
-            </p>
-          </div>
-          
-          <div className="flex gap-1 px-2 items-center border border-light/50 rounded-lg cursor-pointer transition-colors duration-200 group">
-            <MedalIcon className="text-light group-hover:text-white" size={16} />
-          </div>
+            <RepeatIcon
+              size={16}
+              weight="regular"
+              className="text-inherit"
+            />
+            <span>{fmt(reposts)}</span>
+          </button>
 
-          <div className="flex gap-1 px-2 items-center border border-light/50 rounded-lg cursor-pointer transition-colors duration-200 group">
-            <ShareFatIcon className="text-light group-hover:text-white" size={16} />
-          </div>
+          <button
+            aria-label="Curtir"
+            onClick={toggleLike}
+            className={`flex items-center gap-2 px-3 py-0.5 rounded-lg border-2 select-none transition-all duration-200 cursor-pointer
+              ${
+                liked
+                  ? "border-orange text-orange bg-[rgba(255,138,0,0.06)] hover:shadow-[0_0_12px_rgba(255,138,0,0.18)]"
+                  : "border-lines text-lines hover:border-orange"
+              }`}
+          >
+            <HeartIcon
+              size={16}
+              weight={liked ? "fill" : "regular"}
+              className={`transform transition-transform duration-150 ${
+                liked ? "scale-105" : ""
+              }`}
+            />
+            <span>{fmt(likes)}</span>
+          </button>
+
+          <button
+            aria-label="Compartilhar"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 border-lines text-lines bg-transparent hover:border-orange transition-all duration-200 cursor-pointer"
+          >
+            <ShareFatIcon size={16} weight="regular" />
+          </button>
+
+          <button
+            aria-label="Medalha"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 border-lines text-lines bg-transparent hover:border-orange transition-all duration-200 cursor-pointer"
+          >
+            <MedalIcon size={16} weight="regular" />
+          </button>
         </div>
       </div>
     </div>
