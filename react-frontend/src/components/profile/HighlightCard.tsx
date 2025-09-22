@@ -1,7 +1,12 @@
 "use client";
 import React from "react";
 
-export default function HighlightCard() {
+interface HighlightCardProps {
+  fixed?: boolean; // adiciona aqui
+  // outras props que você precisar
+}
+
+export default function HighlightCard({ fixed }: HighlightCardProps) {
   return (
     <div className="mt-4 ml-8 relative w-[528px] h-[180px] rounded-2xl overflow-hidden border border-white/10 shadow-lg cursor-pointer">
       {/* Fundo com imagem */}

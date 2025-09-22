@@ -8,9 +8,8 @@ import {
   ShareFatIcon,
   DotsThreeOutlineIcon,
 } from "@phosphor-icons/react";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
-// Definição da interface para as props, garantindo tipagem segura
 interface PostcardProps {
   fixed?: boolean;
   userAvatar?: string;
@@ -38,11 +37,13 @@ export default function Postcard({
   initialLikes,
   content,
 }: PostcardProps) {
-  // Funções de formatação e interações movidas para o componente Postcard
   const [reposts, setReposts] = useState(initialReposts || 0);
   const [likes, setLikes] = useState(initialLikes || 0);
   const [repostActive, setRepostActive] = useState(false);
   const [liked, setLiked] = useState(false);
+  const [showRepostMenu, setShowRepostMenu] = useState(false);
+
+  const repostMenuRef = useRef<HTMLDivElement | null>(null);
 
   function fmt(n: number) {
     if (n >= 1000) return `${(n / 1000).toFixed(1)} mil`;
@@ -56,43 +57,66 @@ export default function Postcard({
     });
   }
 
-  function toggleRepost() {
-    setRepostActive((s) => {
-      setReposts((prev) => (s ? prev - 1 : prev + 1));
-      return !s;
-    });
+  function handleRepostClick() {
+    setShowRepostMenu((prev) => !prev);
   }
+
+  function handleRepost(type: "simples" | "com-comentario") {
+    if (type === "simples") {
+      setRepostActive(true);
+      setReposts((prev) => prev + 1);
+    }
+    if (type === "com-comentario") {
+      alert("Abrir modal para repostar com comentário 🚀");
+    }
+    setShowRepostMenu(false);
+  }
+
+  // Fecha menu ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        repostMenuRef.current &&
+        !repostMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowRepostMenu(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="mt-4 gap-4 ml-8 flex">
-      <div className="flex flex-col gap-2 bg-[linear-gradient(180deg,#060606_0%,#151515_100%)] p-4 rounded-lg border border-lines w-132">
+      <div className="flex flex-col gap-2 bg-[linear-gradient(180deg,#060606_0%,#151515_100%)] p-4 rounded-lg border border-lines w-132 relative">
         {fixed && (
           <div className="flex gap-2 items-center">
-            <PushPinSimpleIcon
-              size={16}
-              weight="fill"
-              className="text-light"
-            />
+            <PushPinSimpleIcon size={16} weight="fill" className="text-light" />
             <p className="text-sm text-light">Fixado</p>
           </div>
         )}
+
         {(userAvatar || userName) && (
           <div className="flex justify-between">
             <div className="flex gap-2 items-center">
               {userAvatar && (
                 <img
                   src={userAvatar}
-                  className="size-10 object-cover rounded-lg"
+                  className="size-10 object-cover rounded-lg cursor-pointer"
                   alt="avatar user"
                 />
               )}
               <div className="flex flex-col">
-                {userName && <p className="text-light font-bold">{userName}</p>}
-                {userHandle && <p className="text-sm text-lines">@{userHandle}</p>}
+                {userName && <p className="text-light font-bold cursor-pointer">{userName}</p>}
+                {userHandle && (
+                  <p className="text-sm text-lines cursor-pointer">@{userHandle}</p>
+                )}
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {timePosted && <p className="text-sm text-lines">{timePosted}</p>}
+              {timePosted && (
+                <p className="text-sm text-lines">{timePosted}</p>
+              )}
               <DotsThreeOutlineIcon
                 size={16}
                 className="text-lines cursor-pointer"
@@ -100,7 +124,9 @@ export default function Postcard({
             </div>
           </div>
         )}
+
         <p className="text-light">{postText || content}</p>
+
         {postImages && postImages.length > 0 && (
           <div className="mt-2 flex gap-1">
             {postImages.map((src, index) => (
@@ -114,50 +140,68 @@ export default function Postcard({
           </div>
         )}
 
-        {(initialComments !== undefined || initialReposts !== undefined || initialLikes !== undefined) && (
-          <div className="mt-3 flex items-center gap-3">
+        {(initialComments !== undefined ||
+          initialReposts !== undefined ||
+          initialLikes !== undefined) && (
+          <div className="mt-3 flex items-center gap-3 relative">
+            {/* Comentários */}
             {initialComments !== undefined && (
               <button
                 aria-label="Comentários"
-                className="flex items-center gap-2 px-3 py-1 rounded-lg border-2 border-lines text-lines bg-transparent hover:border-orange transition-all duration-200 cursor-pointer"
+                className="flex items-center gap-2 px-3 py-1 rounded-lg border-2 border-lines text-lines hover:border-orange transition-all duration-200"
               >
-                <ChatCircleIcon
-                  size={16}
-                  weight="regular"
-                  className="text-inherit"
-                />
+                <ChatCircleIcon size={16} weight="regular" />
                 <span className="text-sm select-none">{fmt(initialComments)}</span>
               </button>
             )}
 
+            {/* Repost */}
             {initialReposts !== undefined && (
-              <button
-                aria-label="Repost"
-                onClick={toggleRepost}
-                className={`flex items-center gap-2 px-3 py-1 rounded-lg border-2 text-sm select-none transition-all duration-200 cursor-pointer
-                ${
-                  repostActive
-                    ? "border-orange text-orange bg-[rgba(255,138,0,0.06)] hover:shadow-[0_0_10px_rgba(255,138,0,0.15)]"
-                    : "border-lines text-lines hover:border-orange"
-                }`}
-              >
-                <RepeatIcon
-                  size={16}
-                  weight="regular"
-                  className="text-inherit"
-                />
-                <span>{fmt(reposts)}</span>
-              </button>
+              <div className="relative" ref={repostMenuRef}>
+                <button
+                  aria-label="Repost"
+                  onClick={handleRepostClick}
+                  className={`flex items-center gap-2 px-3 py-1 rounded-lg border-2 text-sm transition-all duration-200 cursor-pointer
+                  ${
+                    repostActive
+                      ? "border-orange text-orange bg-[rgba(255,138,0,0.06)]"
+                      : "border-lines text-lines hover:border-orange"
+                  }`}
+                >
+                  <RepeatIcon size={16} weight="regular" />
+                  <span>{fmt(reposts)}</span>
+                </button>
+
+                {showRepostMenu && (
+                  <div className="absolute top-10 left-0 w-32 bg-[#1a1a1a] border border-lines rounded-lg shadow-lg z-50">
+                    <button
+                      onClick={() => handleRepost("simples")}
+                      className="w-full text-left px-4 py-2 hover:bg-[#2a2a2a] text-light flex items-center gap-2 cursor-pointer"
+                    >
+                      <RepeatIcon/>
+                      Repostar
+                    </button>
+                    <button
+                      onClick={() => handleRepost("com-comentario")}
+                      className="w-full text-left px-4 py-2 hover:bg-[#2a2a2a] text-light flex items-center gap-2 cursor-pointer"
+                    >
+                      <ChatCircleIcon/>
+                       Comentar
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
 
+            {/* Likes */}
             {initialLikes !== undefined && (
               <button
                 aria-label="Curtir"
                 onClick={toggleLike}
-                className={`flex items-center gap-2 px-3 py-0.5 rounded-lg border-2 select-none transition-all duration-200 cursor-pointer
+                className={`flex items-center gap-2 px-3 py-0.5 rounded-lg border-2 transition-all duration-200 cursor-pointer
                 ${
                   liked
-                    ? "border-orange text-orange bg-[rgba(255,138,0,0.06)] hover:shadow-[0_0_12px_rgba(255,138,0,0.18)]"
+                    ? "border-orange text-orange bg-[rgba(255,138,0,0.06)]"
                     : "border-lines text-lines hover:border-orange"
                 }`}
               >
@@ -172,16 +216,18 @@ export default function Postcard({
               </button>
             )}
 
+            {/* Share */}
             <button
               aria-label="Compartilhar"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 border-lines text-lines bg-transparent hover:border-orange transition-all duration-200 cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 border-lines text-lines hover:border-orange transition-all duration-200"
             >
               <ShareFatIcon size={16} weight="regular" />
             </button>
 
+            {/* Medalha */}
             <button
               aria-label="Medalha"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 border-lines text-lines bg-transparent hover:border-orange transition-all duration-200 cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg border-2 border-lines text-lines hover:border-orange transition-all duration-200"
             >
               <MedalIcon size={16} weight="regular" />
             </button>

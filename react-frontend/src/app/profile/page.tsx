@@ -9,11 +9,12 @@ import {
   SealCheckIcon,
 } from "@phosphor-icons/react";
 import React, { useState } from "react";
+import Sidebar from "@/components/common/Sidebar";
 
 interface PostType {
   id: number;
   type: "post" | "memory" | "media";
-  fixed?: boolean; // opcional, vamos garantir default na hora de renderizar
+  fixed?: boolean;
   userAvatar?: string;
   userName?: string;
   userHandle?: string;
@@ -24,13 +25,13 @@ interface PostType {
   initialReposts?: number;
   initialLikes?: number;
   content?: string;
+  component?: "highlight"; // para identificar casos especiais
 }
 
 export default function Page() {
   const [checked, setChecked] = useState(false);
   const [activeTab, setActiveTab] = useState("Principal");
 
-  // 👉 Posts de exemplo
   const allPosts: PostType[] = [
     {
       id: 1,
@@ -59,47 +60,49 @@ export default function Page() {
     {
       id: 3,
       type: "memory",
-      content: "Uma memória legal",
+      component: "highlight",
     },
     {
       id: 4,
+      type: "memory",
+      content: "Uma memória legal",
+    },
+    {
+      id: 5,
       type: "media",
       content: "Uma foto ou vídeo",
     },
   ];
 
-  // 👉 Regra de filtragem
+  // 👉 Filtra posts de acordo com a aba
   const filteredPosts = allPosts.filter((item) => {
-    if (activeTab === "Principal") return true; // mostra tudo
+    if (activeTab === "Principal") return true;
     if (activeTab === "Posts") return item.type === "post";
     if (activeTab === "Memórias") return item.type === "memory";
     if (activeTab === "Mídia") return item.type === "media";
     return true;
   });
 
-  const fixedPost = filteredPosts.find((post) => post.fixed);
-  const otherPosts = filteredPosts.filter((post) => !post.fixed);
+  const fixedPost =
+    (activeTab === "Principal" || activeTab === "Posts") &&
+    filteredPosts.find((post) => post.fixed);
+
+  const fixedMemory =
+    (activeTab === "Principal" || activeTab === "Memórias") &&
+    filteredPosts.find((post) => post.component === "highlight");
+
+  const otherPosts = filteredPosts.filter(
+    (post) => !post.fixed && post.component !== "highlight"
+  );
 
   return (
     <div className="flex min-h-screen">
-      {/* 👉 Sidebar fixa na esquerda */}
-      <aside className="fixed left-48 top-0 h-full w-[70px] flex flex-col justify-between items-center py-6">
-        <img
-          src="/logo.png"
-          alt="logo"
-          className="size-11 object-cover cursor-pointer"
-        />
+      <Sidebar/>
 
-        <img
-          src="https://i.pinimg.com/736x/a0/e3/9b/a0e39bc4ee357ab22bdb92ea6c7d127e.jpg"
-          alt="user avatar"
-          className="size-12 rounded-lg object-cover cursor-pointer"
-        />
-      </aside>
-
-      {/* 👉 Conteúdo central */}
+      {/* Conteúdo central */}
       <main className="flex-1 max-w-[1320px] mx-auto mt-4">
         <div className="flex flex-col items-center">
+          {/* Banner + perfil */}
           <div className="relative flex justify-start">
             <img
               src="https://i.pinimg.com/736x/d6/0c/93/d60c9340728598bc242af282fcd0ab41.jpg"
@@ -187,42 +190,38 @@ export default function Page() {
             ))}
           </div>
 
-          {/* Time favorito */}
-          <div className="mt-4 ml-8 gap-4 flex">
-            <img
-              src="https://img.sofascore.com/api/v1/team/1644/image"
-              alt="favorite-team"
-              className="size-20 object-cover bg-[linear-gradient(180deg,#060606_0%,#151515_100%)] p-2 rounded-lg border border-lines"
-            />
-            <p className="text-sm text-light bg-[linear-gradient(180deg,#060606_0%,#151515_100%)] p-2 rounded-lg border border-lines w-108">
-              Believe, <span className="text-orange">@psg</span> &{" "}
-              <span className="text-orange">@equipedefrance</span>,{" "}
-              <span className="text-orange">@adidas</span>
-            </p>
-          </div>
-
-           {/* Conteúdo filtrado */}
-          <div className=" w-full flex flex-col items-center">
-            {/* Renderiza o post fixado primeiro, se existir */}
-            {fixedPost && (
-              <Postcard
-                key={fixedPost.id}
-                {...fixedPost}
-                fixed={true} // Força o 'fixed' para true para garantir que o ícone apareça
-              />
+          {/* Conteúdo filtrado */}
+          <div className="w-full flex flex-col items-center">
+            {/* Aba Principal */}
+            {activeTab === "Principal" && (
+              <>
+                {fixedPost && <Postcard key={fixedPost.id} {...fixedPost} fixed={fixedPost.fixed} />}
+                {fixedMemory && <HighlightCard key={fixedMemory.id} fixed />}
+                {otherPosts.map((post) =>
+                  post.component === "highlight" ? null : (
+                    <Postcard key={post.id} {...post} fixed={post.fixed} />
+                  )
+                )}
+              </>
             )}
 
-            {/* Renderiza o HighlightCard em seguida */}
-            <HighlightCard />
+            {/* Aba Memórias */}
+            {activeTab === "Memórias" &&
+              filteredPosts.map((post) =>
+                post.component === "highlight" ? (
+                  <HighlightCard key={post.id} fixed />
+                ) : (
+                  <Postcard key={post.id} {...post} fixed={post.fixed} />
+                )
+              )}
 
-            {/* Renderiza o restante dos posts */}
-            {otherPosts.map((post) => (
-              <Postcard
-                key={post.id}
-                {...post}
-                fixed={post.fixed ?? false}
-              />
-            ))}
+            {/* Outras abas */}
+            {activeTab !== "Principal" && activeTab !== "Memórias" &&
+              filteredPosts.map((post) =>
+                post.component === "highlight" ? null : (
+                  <Postcard key={post.id} {...post} fixed={post.fixed} />
+                )
+              )}
           </div>
         </div>
 

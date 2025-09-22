@@ -1,14 +1,14 @@
 "use client"
 
-import ThreeColumnLayout from "@/components/layout/ThreeColumnLayout";
-import MainContent from "@/components/home/MainContent";
-import RightSidebar from "@/components/home/RightSidebar";
+import GlassMenu from '@/components/common/GlassMenu'
+import Sidebar from '@/components/common/Sidebar'
+import React from 'react'
 
-export default function Home() {
+export default function page() {
   return (
-    <ThreeColumnLayout
-      mainContent={<MainContent />}
-      rightColumnContent={<RightSidebar />}
-    />
-  );
+    <div>
+      <Sidebar/>
+      <GlassMenu />
+    </div>
+  )
 }
