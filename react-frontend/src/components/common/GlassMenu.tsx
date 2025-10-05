@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon, PencilSimpleLineIcon, HouseIcon, ShieldIcon, EnvelopeSimpleIcon } from "@phosphor-icons/react";
 import PostModal from '@/components/common/PostModal'; // Importe o componente PostModal
